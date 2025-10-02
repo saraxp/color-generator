@@ -13,94 +13,86 @@ def generate_monochromatic():
     return colors
 
 def generate_complementary():
-    # Generate 5 complementary colors using opposite hues on color wheel
-    primary_hue = random.randint(0, 360)
-    complement_hue = (primary_hue + 180) % 360
+    base_hue = random.randint(0, 360)
+    complement_hue = (base_hue + 180) % 360
+    base_sat = random.randint(55, 75)
+    base_light = random.randint(40, 55)
     
     colors = [
-        (primary_hue, 70, 50),               # Primary
-        (complement_hue, 70, 50),            # Secondary
-        ((primary_hue + 30) % 360, 80, 60),  # Accent
-        (primary_hue, 50, 85),               # Light
-        (complement_hue, 60, 25)             # Dark
+        (base_hue, base_sat, base_light),                  # Primary
+        (complement_hue, base_sat, base_light),            # Complement
+        ((base_hue + 20) % 360, base_sat - 10, base_light + 15),  # Accent
+        (base_hue, base_sat - 20, base_light + 25),        # Light
+        (complement_hue, base_sat + 15, base_light - 20)   # Dark
     ]
     return colors
+
 
 def generate_analogous():
-    primary_hue = random.randint(0, 360)
+    base_hue = random.randint(0, 360)
+    base_sat = random.randint(55, 75)
+    base_light = random.randint(40, 55)
     
-    # Create 5 colors using analogous hues (±30°)
     colors = [
-        # Three analogous hues
-        (primary_hue, 70, 50),                    # Primary
-        ((primary_hue + 30) % 360, 70, 50),      # Secondary  
-        ((primary_hue - 30) % 360, 70, 50),      # Accent
-        
-        # Light and dark variations
-        (primary_hue, 50, 80),                    # Light
-        ((primary_hue + 15) % 360, 80, 30)       # Dark
+        (base_hue, base_sat, base_light),                       # Primary
+        ((base_hue + 30) % 360, base_sat - 5, base_light + 10), # Secondary
+        ((base_hue - 30) % 360, base_sat + 5, base_light - 10), # Accent
+        (base_hue, base_sat - 15, base_light + 25),             # Light
+        ((base_hue + 15) % 360, base_sat + 10, base_light - 20) # Dark
     ]
-    
     return colors
 
+
 def generate_triadic():
-    # Get the 3 triadic hues (120° apart)
-    primary_hue = random.randint(0, 360)
-    secondary_hue = (primary_hue + 120) % 360
-    tertiary_hue = (primary_hue + 240) % 360
+    base_hue = random.randint(0, 360)
+    secondary_hue = (base_hue + 120) % 360
+    tertiary_hue = (base_hue + 240) % 360
     
-    # Create 5 colors
+    base_sat = random.randint(55, 75)
+    base_light = random.randint(40, 55)
+    
     colors = [
-        # Three triadic colors
-        (primary_hue, 70, 50),        # Primary
-        (secondary_hue, 70, 50),      # Secondary
-        (tertiary_hue, 70, 50),       # Accent
-        
-        # Light and dark variations
-        (primary_hue, 50, 85),        # Light
-        (secondary_hue, 80, 25)       # Dark
+        (base_hue, base_sat, base_light),                        # Primary
+        (secondary_hue, base_sat - 5, base_light + 10),          # Secondary
+        (tertiary_hue, base_sat + 5, base_light - 10),           # Accent
+        (base_hue, base_sat - 15, base_light + 25),              # Light
+        (secondary_hue, base_sat + 10, base_light - 20)          # Dark
     ]
-    
     return colors
 
 def generate_split_complementary():
-    # Get primary and its split complements
-    primary_hue = random.randint(0, 360)
-    complement_base = (primary_hue + 180) % 360
-    split1_hue = (complement_base + 30) % 360  # Complement + 30°
-    split2_hue = (complement_base - 30) % 360  # Complement - 30°
+    base_hue = random.randint(0, 360)
+    complement_base = (base_hue + 180) % 360
+    split1_hue = (complement_base + 30) % 360
+    split2_hue = (complement_base - 30) % 360
     
-    # Create 5 colors
+    base_sat = random.randint(55, 75)
+    base_light = random.randint(40, 55)
+    
     colors = [
-        # Split complementary colors
-        (primary_hue, 70, 50),        # Primary
-        (split1_hue, 70, 50),         # Secondary
-        (split2_hue, 70, 50),         # Accent
-        
-        # Light and dark variations
-        (primary_hue, 50, 85),        # Light
-        (split1_hue, 80, 25)          # Dark
+        (base_hue, base_sat, base_light),                        # Primary
+        (split1_hue, base_sat - 5, base_light + 10),             # Secondary
+        (split2_hue, base_sat + 5, base_light - 10),             # Accent
+        (base_hue, base_sat - 15, base_light + 25),              # Light
+        (split1_hue, base_sat + 10, base_light - 20)             # Dark
     ]
-    
     return colors
 
+
 def generate_square():
-    # Get the 4 square hues (90° apart)
-    primary_hue = random.randint(0, 360)
-    secondary_hue = (primary_hue + 90) % 360
-    tertiary_hue = (primary_hue + 180) % 360
-    quaternary_hue = (primary_hue + 270) % 360
+    base_hue = random.randint(0, 360)
+    secondary_hue = (base_hue + 90) % 360
+    tertiary_hue = (base_hue + 180) % 360
+    quaternary_hue = (base_hue + 270) % 360
     
-    # Create 5 colors
+    base_sat = random.randint(55, 75)
+    base_light = random.randint(40, 55)
+    
     colors = [
-        # Four square colors + one variation
-        (primary_hue, 70, 50),        # Primary
-        (secondary_hue, 70, 50),      # Secondary
-        (tertiary_hue, 70, 50),       # Accent
-        
-        # Light and dark from different hues
-        (quaternary_hue, 60, 80),     # Light
-        (primary_hue, 80, 25)         # Dark
+        (base_hue, base_sat, base_light),                        # Primary
+        (secondary_hue, base_sat - 5, base_light + 10),          # Secondary
+        (tertiary_hue, base_sat + 5, base_light - 10),           # Accent
+        (quaternary_hue, base_sat - 15, base_light + 25),        # Light
+        (base_hue, base_sat + 10, base_light - 20)               # Dark
     ]
-    
     return colors

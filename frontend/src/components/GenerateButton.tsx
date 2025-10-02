@@ -27,9 +27,9 @@ const GenerateButton = ({ schemeType, setColors }:GenerateButtonProps) => {
   };
 
   return (
-    <div className='flex justify-center mt-5'>
+    <div className='flex justify-center mt-6'>
         <button 
-        className='bg-blue-300 border-1 border-solid border-blue-950'
+        className='w-[189px] h-[36px] bg-[#FFF9F9] border-1 border-[#936666] rounded-full font-sometype font-medium text-lg'
         onClick={handleGenerate}
         >Generate</button>
     </div>

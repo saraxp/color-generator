@@ -1,7 +1,15 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Sometype+Mono:ital,wght@0,400..700;1,400..700&display=swap');
 
-@theme {
-  --font-sometype: "Sometype Mono", monospace; 
+@font-face {
+  font-family: "Sometype Mono";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/SometypeMono.ttf') format("truetype");
 }
 
+@layer utilities {
+  .font-sometype {
+    font-family: "Sometype Mono", monospace;
+  }
+}

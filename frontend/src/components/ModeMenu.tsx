@@ -1,3 +1,5 @@
+import React, {useEffect, useCallback} from 'react';
+
 const types = [
   "Monochromatic",
   "Complementary",
@@ -14,18 +16,31 @@ interface ModeMenuProps {
 
 const ModeMenu = ({ mode, onModeChange }: ModeMenuProps) => {
 
-  function ChangeType() {
+   const ChangeType = useCallback(() => {
     const currentIndex = types.indexOf(mode);
     const newIndex = (currentIndex + 1) % types.length;
     onModeChange(types[newIndex]); 
-  }
+  }, [mode, onModeChange]);
 
-  function ChangeTypeRev() {
+  const ChangeTypeRev = useCallback(() => {
     const currentIndex = types.indexOf(mode);
     const newIndex = currentIndex === 0 ? types.length - 1 : currentIndex - 1;
     onModeChange(types[newIndex]);
-  }
+  }, [mode, onModeChange]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if(e.key === 'ArrowDown'){
+        ChangeTypeRev();
+      } else if(e.key === 'ArrowUp'){
+        ChangeType();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [ChangeType, ChangeTypeRev]);
 
   return (
     <div className='flex flex-row justify-center items-center mb-6'>

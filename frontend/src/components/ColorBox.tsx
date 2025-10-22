@@ -1,7 +1,6 @@
 import React from 'react'
 import type { Color } from '../types/index'
 
-
 interface ColorBoxProps {
   color?: Color; 
 }

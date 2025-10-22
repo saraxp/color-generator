@@ -20,3 +20,15 @@ class PaletteResponse(BaseModel):
 class GeneratePaletteRequest(BaseModel):
     scheme_type: str
     locked_colors: Optional[List[dict]] = None
+
+
+# --- Schemas for Database ---
+
+class PaletteCreate(PaletteResponse):
+    pass 
+
+
+class Palette(PaletteResponse):
+    id: int 
+    class Config:
+        orm_mode = True

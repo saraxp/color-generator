@@ -1,8 +1,14 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from models.palette import ColorFormat, Color, PaletteResponse, GeneratePaletteRequest
+from sqlalchemy.orm import Session # type: ignore
+from backend.models.schemas import ColorFormat, Color, PaletteResponse, GeneratePaletteRequest, PaletteCreate, Palette
 from utils.color_generator import generate_monochromatic, generate_complementary, generate_analogous, generate_triadic, generate_split_complementary, generate_square
+from .utils.database import SessionLocal, engine
+from .models import models
+
+# create database table
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -17,6 +23,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 def hsl_to_rgb(h, s, l):
@@ -110,6 +123,27 @@ async def generate_palette(scheme_type: str):
         scheme_type=scheme_type
     )
 
+# save generated palettes
+@app.post("/palettes/", response_model=Palette)
+def create_palette(
+    palette_data: PaletteCreate,
+    db: Session = Depends(get_db)
+):
+    palette_model_data = palette_data.model_dump()
+    db_palette = models.Palette(**palette_model_data)
+    db.add(db_palette)
+    db.commit()
+    db.refresh(db_palette)
+    return db_palette
+
+@app.get("/palettes/{palette_id}", response_model=Palette)
+def read_palette(palette_id: int, db: Session = Depends(get_db)):  
+    
+    db_palette = db.query(models.Palette).filter(models.Palette.id == palette_id).first()
+    if db_palette is None:
+        raise HTTPException(status_code=404, detail="Palette not found")
+        
+    return db_palette
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

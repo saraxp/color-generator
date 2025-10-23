@@ -2,10 +2,10 @@ import uvicorn
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session # type: ignore
-from backend.models.schemas import ColorFormat, Color, PaletteResponse, GeneratePaletteRequest, PaletteCreate, Palette
+from models.schemas import ColorFormat, Color, PaletteResponse, GeneratePaletteRequest, PaletteCreate, Palette
 from utils.color_generator import generate_monochromatic, generate_complementary, generate_analogous, generate_triadic, generate_split_complementary, generate_square
-from .utils.database import SessionLocal, engine
-from .models import models
+from utils.database import SessionLocal, engine
+from models import models
 
 # create database table
 models.Base.metadata.create_all(bind=engine)

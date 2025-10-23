@@ -22,7 +22,7 @@ class GeneratePaletteRequest(BaseModel):
     locked_colors: Optional[List[dict]] = None
 
 
-# --- Schemas for Database ---
+# Schemas for Database
 
 class PaletteCreate(PaletteResponse):
     pass 
@@ -31,4 +31,4 @@ class PaletteCreate(PaletteResponse):
 class Palette(PaletteResponse):
     id: int 
     class Config:
-        orm_mode = True
+        from_attributes = True

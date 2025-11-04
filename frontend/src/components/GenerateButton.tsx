@@ -1,31 +1,31 @@
 import fetchColors from "../utils/GenerateColors";
 import { useEffect, useCallback } from "react";
-
-interface Color {
-  name: string;
-  formats: {
-    hex: string;
-    rgb: string;
-    hsl: string;
-  };
-  locked: boolean;
-}
+import type { Color } from '../types/index'
 
 interface GenerateButtonProps {
   schemeType: string;
+  colors: Color[];  // Add this
   setColors: React.Dispatch<React.SetStateAction<Color[]>>;
 }
 
-const GenerateButton = ({ schemeType, setColors }:GenerateButtonProps) => {
+const GenerateButton = ({ schemeType, colors, setColors }:GenerateButtonProps) => {
   
    const handleGenerate = useCallback(async () => {
     try {
-      const colorData = await fetchColors({schemeType});
+      // Filter locked colors
+      const lockedColors = colors.filter(color => color.locked);
+      
+      // Pass locked colors to fetchColors
+      const colorData = await fetchColors({
+        schemeType, 
+        lockedColors: lockedColors.length > 0 ? lockedColors : undefined
+      });
+      
       setColors(colorData);
     } catch (error) {
       console.error("Failed to generate colors:", error);
     }
-  }, [schemeType, setColors]);
+  }, [schemeType, colors, setColors]);  // Add colors to dependencies
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -34,8 +34,8 @@ const GenerateButton = ({ schemeType, setColors }:GenerateButtonProps) => {
       }
     };
     
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    globalThis.addEventListener('keydown', handleKeyDown);
+    return () => globalThis.removeEventListener('keydown', handleKeyDown);
   }, [handleGenerate]);
 
   return (

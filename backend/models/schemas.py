@@ -16,7 +16,8 @@ class Color(BaseModel):
 class PaletteResponse(BaseModel):
     colors: List[Color]
     scheme_type: str # Monochromatic, Square, Complementary, Split-Complementary, Triadic, Analogous
-
+    locked_colors: Optional[List[dict]]
+    
 class GeneratePaletteRequest(BaseModel):
     scheme_type: str
     locked_colors: Optional[List[dict]] = None

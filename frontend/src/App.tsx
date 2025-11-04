@@ -5,6 +5,7 @@ import GenerateButton from "./components/GenerateButton";
 import ClipBoardButton from "./components/ClipBoardButton";
 import ClipBoard from "./components/ClipBoard";
 import ShareButton from "./components/ShareButton";
+import LockButton from "./components/LockButton";
 import type { Color } from "./types/index";
 import "./App.css";
 
@@ -20,6 +21,13 @@ function App() {
   const [isClipboardOpen, setIsClipboardOpen] = useState(false);
   const [activeColorIndex, setActiveColorIndex] = useState<number | null>(null);
 
+  const toggleLock = (index: number) => {
+    setColors(prevColors => 
+      prevColors.map((color, i) => 
+        i === index ? { ...color, locked: !color.locked } : color
+      )
+    );
+  };
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-white relative p-4 sm:p-6 lg:p-10">
 
@@ -52,7 +60,7 @@ function App() {
                 className="relative cursor-pointer lg:cursor-default"
                 onClick={() => setActiveColorIndex(activeColorIndex === i ? null : i)}
               >
-                <ColorBox color={c} />
+                <ColorBox color={c} onToggleLock={() => toggleLock(0)}/>
                 <div
                   className={`
                     absolute inset-0 bg-black/20 
@@ -104,7 +112,7 @@ function App() {
       </div>
 
       {/* Generate Button */}
-      <GenerateButton schemeType={selectedSchemeType} setColors={setColors} />
+      <GenerateButton schemeType={selectedSchemeType} colors={colors}  setColors={setColors} />
 
       {/* Clipboard + Share Buttons */}
       <ClipBoard colors={colors} ClipBoardStatus={isClipboardOpen} />

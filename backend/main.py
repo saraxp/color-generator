@@ -2,10 +2,12 @@ import uvicorn
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session # type: ignore
+from typing import Optional
 from models.schemas import ColorFormat, Color, PaletteResponse, GeneratePaletteRequest, PaletteCreate, Palette
 from utils.color_generator import generate_monochromatic, generate_complementary, generate_analogous, generate_triadic, generate_split_complementary, generate_square
 from utils.database import SessionLocal, engine
 from models import models
+import json
 
 # create database table
 models.Base.metadata.create_all(bind=engine)
@@ -100,7 +102,7 @@ def convert_hsl_tuples_to_colors(hsl_tuples):
     
     return colors
 
-@app.get("/api/generate-palette", response_model=PaletteResponse)
+'''@app.get("/api/generate-palette", response_model=PaletteResponse)
 async def generate_palette(scheme_type: str):
 
     if scheme_type == "Monochromatic":
@@ -120,6 +122,58 @@ async def generate_palette(scheme_type: str):
     
     return PaletteResponse(
         colors = formatted_colors,
+        scheme_type=scheme_type
+    )
+'''
+
+@app.get("/api/generate-palette", response_model=PaletteResponse)
+async def generate_palette(
+    scheme_type: str,
+    locked_colors: Optional[str] = None  # JSON string of locked colors
+):
+    if scheme_type == "Monochromatic":
+        hsl_colors = generate_monochromatic()
+    elif scheme_type == "Complementary":
+        hsl_colors = generate_complementary()
+    elif scheme_type == "Analogous":
+        hsl_colors = generate_analogous()
+    elif scheme_type == "Triadic":
+        hsl_colors = generate_triadic()
+    elif scheme_type == "Split-Complementary":
+        hsl_colors = generate_split_complementary()
+    elif scheme_type == "Square":
+        hsl_colors = generate_square()
+    else:
+        raise HTTPException(status_code=400, detail="Unknown scheme_type")
+
+    formatted_colors = convert_hsl_tuples_to_colors(hsl_colors)
+
+    if locked_colors:
+        try:
+            parsed = json.loads(locked_colors)
+            if isinstance(parsed, dict):
+                parsed = [parsed]
+            if isinstance(parsed, list):
+                for lc in parsed:
+                    name = lc.get("name")
+                    formats = lc.get("formats")
+                    if not name or not formats:
+                        continue
+                    for i, fc in enumerate(formatted_colors):
+                        if fc.name == name:
+                            formatted_colors[i] = Color(
+                                name=name,
+                                formats=ColorFormat(
+                                    hex=formats.get("hex", fc.formats.hex),
+                                    rgb=formats.get("rgb", fc.formats.rgb),
+                                    hsl=formats.get("hsl", fc.formats.hsl),
+                                ),
+                            )
+        except Exception:
+            raise HTTPException(status_code=400, detail="Invalid locked_colors JSON")
+
+    return PaletteResponse(
+        colors=formatted_colors,
         scheme_type=scheme_type
     )
 

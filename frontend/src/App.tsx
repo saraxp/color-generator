@@ -5,7 +5,7 @@ import GenerateButton from "./components/GenerateButton";
 import ClipBoardButton from "./components/ClipBoardButton";
 import ClipBoard from "./components/ClipBoard";
 import ShareButton from "./components/ShareButton";
-import LockButton from "./components/LockButton";
+//import LockButton from "./components/LockButton";
 import type { Color } from "./types/index";
 import "./App.css";
 
@@ -115,7 +115,11 @@ function App() {
       <GenerateButton schemeType={selectedSchemeType} colors={colors}  setColors={setColors} />
 
       {/* Clipboard + Share Buttons */}
-      <ClipBoard colors={colors} ClipBoardStatus={isClipboardOpen} />
+      {isClipboardOpen && (
+        <div className="fixed bottom-20 right-4">
+          <ClipBoard colors={colors} ClipBoardStatus={isClipboardOpen} />
+        </div>
+      )}
       <div className="fixed bottom-4 right-4 flex flex-row gap-4">
         <ClipBoardButton
           ClipBoardStatus={isClipboardOpen}

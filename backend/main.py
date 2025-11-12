@@ -174,8 +174,10 @@ async def generate_palette(
 
     return PaletteResponse(
         colors=formatted_colors,
-        scheme_type=scheme_type
+        scheme_type=scheme_type,
+        locked_colors=None
     )
+
 
 # save generated palettes
 @app.post("/palettes/", response_model=Palette)

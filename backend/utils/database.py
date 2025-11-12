@@ -2,6 +2,7 @@ from sqlalchemy import create_engine # type: ignore
 from sqlalchemy.orm import declarative_base # type: ignore
 from sqlalchemy.orm import sessionmaker # type: ignore
 from dotenv import load_dotenv
+import psycopg2
 import os
 
 load_dotenv()

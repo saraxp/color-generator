@@ -1,4 +1,4 @@
-# YourHue 🎨
+# [depreciated]YourHue 🎨
 
 A modern color palette generator built with React and FastAPI that helps designers and developers create harmonious color schemes using color theory principles.
 
